@@ -5,17 +5,12 @@ from app.serializers import building_cschema
 
 
 def get_all_buildings():
-    query = (
-        Building.query
-    )
+    query = Building.query
     return query.all()
 
 
 def get_building_by_id(building_id):
-    query = (
-        Building.query
-        .filter_by(id=building_id)
-        .one_or_none())
+    query = Building.query.filter_by(id=building_id).one_or_none()
     return query
 
 
@@ -23,9 +18,9 @@ def insert_building(building: dict):
     item = building_cschema.load(building, session=db.session)
     db.session.add(item)
     db.session.commit()
-    return (Building.query
-        .filter(Building.id == db.session.query(func.max(Building.id)))
-        .one_or_none())
+    return Building.query.filter(
+        Building.id == db.session.query(func.max(Building.id))
+    ).one_or_none()
 
 
 def update_building_by_id(building_id, update_building):
@@ -33,11 +28,14 @@ def update_building_by_id(building_id, update_building):
     if not building:
         return None
 
-    building = building_cschema.load(update_building, instance=building, session=db.session, partial=True)
+    building = building_cschema.load(
+        update_building, instance=building, session=db.session, partial=True
+    )
 
     db.session.commit()
 
     return get_building_by_id(building_id)
+
 
 def delete_building_by_id(building_id):
     Building.query.filter(Building.id == building_id).delete()

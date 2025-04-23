@@ -1,5 +1,6 @@
 from app.extensions import db
 
+
 class Country(db.Model):
     __tablename__ = "country"
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +15,9 @@ class TypeBuilding(db.Model):
     __tablename__ = "type_building"
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False)
-    buildings = db.relationship("Building", back_populates="type_building", cascade="all")
+    buildings = db.relationship(
+        "Building", back_populates="type_building", cascade="all"
+    )
 
     def __repr__(self):
         return f"<TypeBuilding(id={self.id}, type={self.type})>"
